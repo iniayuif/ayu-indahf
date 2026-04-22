@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio – Kecerdasan Buatan</title>
+    <title>Portfolio KB – Ayu Indah</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script>
@@ -18,23 +18,16 @@
         theme: {
           extend: {
             colors: {
-              primary: {
-                DEFAULT: "#2563EB",
-                light: "#3B82F6",
-                dark: "#1D4ED8",
-                xdark: "#1E3A8A",
+              pr: {
+                DEFAULT: "#C8956A",
+                light: "#DEB897",
+                dark: "#A0714A",
+                soft: "#FDF6EF",
               },
-              surface: { DEFAULT: "#F0F6FF", card: "#FFFFFF", dark: "#E8F0FE" },
             },
             fontFamily: {
-              sans: ["Plus Jakarta Sans", "sans-serif"],
-              mono: ["Space Mono", "monospace"],
-            },
-            borderRadius: { "2xl": "1rem", "3xl": "1.5rem", "4xl": "2rem" },
-            boxShadow: {
-              card: "0 4px 24px 0 rgba(37,99,235,0.10)",
-              glow: "0 0 32px 0 rgba(37,99,235,0.22)",
-              soft: "0 2px 12px 0 rgba(37,99,235,0.08)",
+              serif: ["Lora", "serif"],
+              sans: ["DM Sans", "sans-serif"],
             },
           },
         },
@@ -42,69 +35,58 @@
     </script>
     <style>
       body {
-        background: #f0f6ff;
-        font-family: "Plus Jakarta Sans", sans-serif;
+        background: #fdf6ef;
+        font-family: "DM Sans", sans-serif;
       }
-
-      /* animated gradient blob */
-      .blob {
-        position: absolute;
-        border-radius: 9999px;
-        filter: blur(80px);
-        opacity: 0.18;
-        animation: blobMove 8s ease-in-out infinite alternate;
-        pointer-events: none;
-      }
-      @keyframes blobMove {
-        0% {
-          transform: translate(0, 0) scale(1);
-        }
-        100% {
-          transform: translate(40px, 30px) scale(1.12);
-        }
-      }
-
-      /* hero entrance */
       .fade-up {
         opacity: 0;
-        transform: translateY(28px);
-        animation: fadeUp 0.7s forwards;
+        transform: translateY(24px);
+        animation: fu 0.65s forwards;
       }
-      @keyframes fadeUp {
+      @keyframes fu {
         to {
           opacity: 1;
           transform: none;
         }
       }
-      .delay-1 {
+      .d1 {
         animation-delay: 0.1s;
       }
-      .delay-2 {
+      .d2 {
         animation-delay: 0.22s;
       }
-      .delay-3 {
+      .d3 {
         animation-delay: 0.36s;
       }
-      .delay-4 {
+      .d4 {
         animation-delay: 0.5s;
       }
-      .delay-5 {
+      .d5 {
         animation-delay: 0.64s;
       }
-
-      /* nav active */
+      .card {
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 40px rgba(200, 149, 106, 0.18);
+      }
+      .skill-bar {
+        transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
       .nav-link {
         position: relative;
-        transition: color 0.2s;
       }
       .nav-link::after {
         content: "";
         position: absolute;
         left: 0;
-        bottom: -3px;
+        bottom: -2px;
         width: 0;
         height: 2px;
-        background: #2563eb;
+        background: #c8956a;
         border-radius: 2px;
         transition: width 0.25s;
       }
@@ -112,505 +94,342 @@
       .nav-link.active::after {
         width: 100%;
       }
-
-      /* card hover */
-      .task-card {
-        transition:
-          transform 0.22s,
-          box-shadow 0.22s;
-      }
-      .task-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 40px 0 rgba(37, 99, 235, 0.18);
-      }
-
-      /* tag pill */
-      .tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-      }
-
-      /* skill bar */
-      .skill-bar {
-        transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      /* avatar ring pulse */
-      .avatar-ring {
-        animation: ringPulse 2.4s ease-in-out infinite;
-      }
-      @keyframes ringPulse {
-        0%,
-        100% {
-          box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18);
-        }
-        50% {
-          box-shadow: 0 0 0 10px rgba(37, 99, 235, 0.08);
-        }
-      }
     </style>
   </head>
-  <body class="min-h-screen text-slate-800">
-    <!-- ───────────── NAVBAR ───────────── -->
+  <body class="min-h-screen text-stone-800">
+    <!-- NAV -->
     <header
-      class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-blue-100 shadow-soft"
+      class="sticky top-0 z-50 bg-[#FDF6EF]/90 backdrop-blur border-b border-amber-100"
     >
       <div
         class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between"
       >
-        <!-- Logo -->
         <a
           href="index.html"
-          class="flex items-center gap-2 font-mono font-bold text-primary text-lg tracking-tight"
+          class="flex items-center gap-2 font-serif font-bold text-pr text-lg"
         >
           <span
-            class="w-8 h-8 rounded-2xl bg-primary flex items-center justify-center text-white text-sm"
+            class="w-8 h-8 rounded-2xl bg-pr flex items-center justify-center text-white text-sm"
+            ><i class="fa-solid fa-brain"></i
+          ></span>
+          Ayu<span class="text-stone-400 font-sans font-normal text-sm ml-1"
+            >· KB Portfolio</span
           >
-            <i class="fa-solid fa-brain"></i>
-          </span>
-          Ayu<span class="text-slate-400">.portfolio</span>
         </a>
-
-        <!-- Desktop nav -->
-        <nav
-          class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600"
-        >
-          <a href="index.html" class="nav-link active text-primary">Beranda</a>
-          <a href="#tugas" class="nav-link">Tugas</a>
-          <a href="#tentang" class="nav-link">Tentang</a>
-          <a href="#kontak" class="nav-link">Kontak</a>
+        <nav class="hidden md:flex items-center gap-7 text-sm text-stone-500">
+          <a href="#" class="nav-link active text-pr font-medium">Beranda</a>
+          <a href="#tugas" class="nav-link hover:text-pr">Tugas</a>
+          <a href="#tentang" class="nav-link hover:text-pr">Tentang</a>
+          <a href="#kontak" class="nav-link hover:text-pr">Kontak</a>
         </nav>
-
-        <!-- Mobile hamburger -->
         <button
-          id="menuBtn"
-          class="md:hidden w-9 h-9 rounded-2xl border border-blue-100 flex items-center justify-center text-primary"
+          id="mb"
+          class="md:hidden w-9 h-9 rounded-xl border border-amber-200 flex items-center justify-center text-pr"
         >
           <i class="fa-solid fa-bars text-sm"></i>
         </button>
       </div>
-
-      <!-- Mobile menu -->
       <div
-        id="mobileMenu"
-        class="hidden md:hidden bg-white border-t border-blue-50 px-6 py-4 space-y-3 text-sm font-medium text-slate-600"
+        id="mm"
+        class="hidden md:hidden bg-[#FDF6EF] border-t border-amber-100 px-6 py-4 space-y-3 text-sm text-stone-500"
       >
-        <a href="index.html" class="block text-primary">Beranda</a>
+        <a href="#" class="block text-pr font-medium">Beranda</a>
         <a href="#tugas" class="block">Tugas</a>
         <a href="#tentang" class="block">Tentang</a>
         <a href="#kontak" class="block">Kontak</a>
       </div>
     </header>
 
-    <!-- ───────────── HERO ───────────── -->
-    <section class="relative overflow-hidden pt-20 pb-24 px-6">
-      <!-- Blobs -->
-      <div
-        class="blob w-96 h-96 bg-blue-400 top-0 -left-24"
-        style="animation-delay: 0s"
-      ></div>
-      <div
-        class="blob w-72 h-72 bg-blue-600 bottom-0 right-0"
-        style="animation-delay: 3s"
-      ></div>
-
-      <div
-        class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 relative z-10"
-      >
-        <!-- Text -->
-        <div class="flex-1 text-center md:text-left">
-          <span
-            class="fade-up delay-1 inline-flex items-center gap-2 bg-blue-50 border border-blue-200 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-5"
+    <!-- HERO -->
+    <section
+      class="max-w-5xl mx-auto px-6 pt-20 pb-20 flex flex-col md:flex-row items-center gap-12"
+    >
+      <div class="flex-1 text-center md:text-left">
+        <span
+          class="fade-up d1 inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-pr text-xs font-semibold px-4 py-1.5 rounded-full mb-5"
+        >
+          <i class="fa-solid fa-graduation-cap"></i> Kelas J2023 · Semester 6
+        </span>
+        <h1
+          class="fade-up d2 font-serif text-4xl md:text-5xl font-bold text-stone-900 leading-tight mb-4"
+        >
+          Halo, saya<br /><span class="text-pr">Ayu Indah</span> 🌸
+        </h1>
+        <p
+          class="fade-up d3 text-stone-500 text-sm leading-relaxed max-w-md mb-8"
+        >
+          Portfolio tugas mata kuliah
+          <strong class="text-stone-700">Kecerdasan Buatan</strong> — STMIK
+          Mardira Indonesia, Semester Genap 2025/2026.
+        </p>
+        <div
+          class="fade-up d4 flex flex-wrap gap-3 justify-center md:justify-start"
+        >
+          <a
+            href="#tugas"
+            class="inline-flex items-center gap-2 bg-pr hover:bg-pr-dark text-white font-semibold px-6 py-3 rounded-2xl transition-all shadow-lg shadow-amber-200"
           >
-            <i class="fa-solid fa-graduation-cap"></i> Mahasiswa Kecerdasan
-            Buatan — Semester 6
-          </span>
-          <h1
-            class="fade-up delay-2 text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4"
+            <i class="fa-solid fa-folder-open text-sm"></i> Lihat Tugas
+          </a>
+          <a
+            href="#tentang"
+            class="inline-flex items-center gap-2 bg-white border border-amber-200 text-pr hover:bg-amber-50 font-semibold px-6 py-3 rounded-2xl transition-all"
           >
-            Halo, saya<br />
-            <span class="text-primary">Ayu Indah Fitriani</span> 👋
-          </h1>
-          <p
-            class="fade-up delay-3 text-slate-500 text-base leading-relaxed max-w-md mb-8"
-          >
-            Halaman portfolio ini merupakan kumpulan tugas mata kuliah
-            <strong class="text-slate-700">Kecerdasan Buatan</strong> — STMIK
-            Mardira Indonesia, Kelas J2023 Semester Genap 2025/2026.
-          </p>
+            <i class="fa-solid fa-user text-sm"></i> Tentang Saya
+          </a>
+        </div>
+      </div>
+      <div class="fade-up d5 flex-shrink-0">
+        <div class="relative w-52 h-52 md:w-60 md:h-60">
           <div
-            class="fade-up delay-4 flex flex-wrap gap-3 justify-center md:justify-start"
+            class="absolute inset-0 rounded-[2.5rem] bg-amber-100 animate-pulse"
+          ></div>
+          <div
+            class="absolute inset-3 rounded-[2rem] bg-gradient-to-br from-pr-light to-pr-dark flex items-center justify-center"
           >
-            <a
-              href="#tugas"
-              class="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-2xl shadow-glow transition-all"
-            >
-              <i class="fa-solid fa-folder-open text-sm"></i> Lihat Tugas
-            </a>
-            <a
-              href="#tentang"
-              class="inline-flex items-center gap-2 bg-white border border-blue-200 text-primary hover:bg-blue-50 font-semibold px-6 py-3 rounded-2xl transition-all"
-            >
-              <i class="fa-solid fa-user text-sm"></i> Tentang Saya
-            </a>
+            <i
+              class="fa-solid fa-user-graduate text-white"
+              style="font-size: 4.5rem; opacity: 0.9"
+            ></i>
           </div>
-        </div>
-
-        <!-- Avatar card -->
-        <div class="fade-up delay-5 flex-shrink-0">
-          <div class="relative w-52 h-52 md:w-64 md:h-64">
-            <!-- ring -->
-            <div
-              class="avatar-ring absolute inset-0 rounded-[2.5rem] bg-blue-100"
-            ></div>
-            <div
-              class="absolute inset-3 rounded-[2rem] bg-gradient-to-br from-primary-light to-primary-dark flex items-center justify-center shadow-glow"
-            >
-              <i
-                class="fa-solid fa-robot text-white"
-                style="font-size: 5rem; opacity: 0.85"
-              ></i>
-            </div>
-            <!-- Badge -->
-            <span
-              class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white border border-blue-100 text-primary text-xs font-bold px-4 py-1.5 rounded-full shadow-soft whitespace-nowrap"
-            >
-              <i class="fa-solid fa-code mr-1"></i> 23110491
-            </span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── STATS BAR ───────────── -->
-    <section class="bg-white border-y border-blue-100 py-6 px-6">
-      <div
-        class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
-      >
-        <div>
-          <p class="text-2xl font-extrabold text-primary font-mono">2</p>
-          <p class="text-xs text-slate-500 mt-0.5">Tugas Selesai</p>
-        </div>
-        <div>
-          <p class="text-2xl font-extrabold text-primary font-mono">6</p>
-          <p class="text-xs text-slate-500 mt-0.5">Semester</p>
-        </div>
-        <div>
-          <p class="text-2xl font-extrabold text-primary font-mono">2026</p>
-          <p class="text-xs text-slate-500 mt-0.5">Tahun Akademik</p>
-        </div>
-        <div>
-          <p class="text-2xl font-extrabold text-primary font-mono">AI</p>
-          <p class="text-xs text-slate-500 mt-0.5">Mata Kuliah</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── TUGAS ───────────── -->
-    <section id="tugas" class="py-20 px-6">
-      <div class="max-w-5xl mx-auto">
-        <div class="mb-10 text-center">
           <span
-            class="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-3"
+            class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white border border-amber-100 text-pr text-xs font-bold px-4 py-1.5 rounded-full shadow whitespace-nowrap"
           >
-            <i class="fa-solid fa-list-check"></i> Kumpulan Tugas
+            <i class="fa-solid fa-id-badge mr-1"></i>23110491
           </span>
-          <h2 class="text-3xl font-extrabold text-slate-900">
+        </div>
+      </div>
+    </section>
+
+    <!-- TUGAS -->
+    <section id="tugas" class="py-16 px-6 bg-white/60">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-10">
+          <span
+            class="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-pr text-xs font-semibold px-4 py-1.5 rounded-full mb-3"
+            ><i class="fa-solid fa-list-check"></i> Kumpulan Tugas</span
+          >
+          <h2 class="font-serif text-3xl font-bold text-stone-900">
             Tugas Kecerdasan Buatan
           </h2>
-          <p class="text-slate-500 text-sm mt-2">
-            Klik kartu untuk membuka detail tugas
-          </p>
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <!-- Tugas 1 -->
+        <div class="grid sm:grid-cols-2 gap-5">
           <a
             href="tugas1.html"
-            class="task-card bg-white rounded-4xl p-7 shadow-card border border-blue-50 block group"
+            class="card bg-white rounded-3xl p-7 border border-amber-100 block group"
           >
-            <div class="flex items-start justify-between mb-5">
+            <div class="flex items-start justify-between mb-4">
               <div
-                class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-soft"
+                class="w-11 h-11 rounded-2xl bg-gradient-to-br from-pr-light to-pr flex items-center justify-center"
               >
-                <i class="fa-solid fa-network-wired text-white text-xl"></i>
+                <i class="fa-solid fa-network-wired text-white"></i>
               </div>
               <span
-                class="text-xs font-mono text-blue-400 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full"
+                class="text-[11px] font-semibold bg-amber-50 border border-amber-100 text-pr px-3 py-1 rounded-full"
                 >Tugas 1</span
               >
             </div>
             <h3
-              class="text-lg font-bold text-slate-800 mb-2 group-hover:text-primary transition-colors"
+              class="font-serif font-bold text-stone-800 mb-2 group-hover:text-pr transition-colors"
             >
-              Algoritma Pencarian (Search Algorithm)
+              Algoritma Pencarian BFS & DFS
             </h3>
-            <p class="text-slate-500 text-sm leading-relaxed mb-5">
-              Implementasi algoritma BFS dan DFS untuk menyelesaikan masalah
-              pencarian jalur pada graf sederhana.
+            <p class="text-stone-500 text-xs leading-relaxed mb-4">
+              Implementasi Breadth-First Search dan Depth-First Search pada
+              penelusuran graf.
             </p>
-            <div class="flex flex-wrap gap-2">
+            <div class="flex gap-2 flex-wrap">
               <span
-                class="tag text-xs font-medium bg-blue-50 text-primary px-3 py-1 rounded-full border border-blue-100"
+                class="text-[11px] bg-amber-50 text-pr px-3 py-1 rounded-full border border-amber-100"
+                >BFS</span
               >
-                <i class="fa-solid fa-diagram-project text-[10px]"></i> BFS
-              </span>
               <span
-                class="tag text-xs font-medium bg-blue-50 text-primary px-3 py-1 rounded-full border border-blue-100"
+                class="text-[11px] bg-amber-50 text-pr px-3 py-1 rounded-full border border-amber-100"
+                >DFS</span
               >
-                <i class="fa-solid fa-diagram-project text-[10px]"></i> DFS
-              </span>
               <span
-                class="tag text-xs font-medium bg-green-50 text-green-600 px-3 py-1 rounded-full border border-green-100"
+                class="text-[11px] bg-green-50 text-green-600 px-3 py-1 rounded-full border border-green-100"
+                ><i class="fa-solid fa-check mr-1"></i>Selesai</span
               >
-                <i class="fa-solid fa-circle-check text-[10px]"></i> Selesai
-              </span>
             </div>
           </a>
 
-          <!-- Tugas 2 -->
           <a
             href="tugas2.html"
-            class="task-card bg-white rounded-4xl p-7 shadow-card border border-blue-50 block group"
+            class="card bg-white rounded-3xl p-7 border border-amber-100 block group"
           >
-            <div class="flex items-start justify-between mb-5">
+            <div class="flex items-start justify-between mb-4">
               <div
-                class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-soft"
+                class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-300 to-pr flex items-center justify-center"
               >
-                <i class="fa-solid fa-chess text-white text-xl"></i>
+                <i class="fa-solid fa-chess text-white"></i>
               </div>
               <span
-                class="text-xs font-mono text-blue-400 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full"
+                class="text-[11px] font-semibold bg-amber-50 border border-amber-100 text-pr px-3 py-1 rounded-full"
                 >Tugas 2</span
               >
             </div>
             <h3
-              class="text-lg font-bold text-slate-800 mb-2 group-hover:text-primary transition-colors"
+              class="font-serif font-bold text-stone-800 mb-2 group-hover:text-pr transition-colors"
             >
-              Algoritma Minimax & Alpha-Beta Pruning
+              Minimax & Alpha-Beta Pruning
             </h3>
-            <p class="text-slate-500 text-sm leading-relaxed mb-5">
+            <p class="text-stone-500 text-xs leading-relaxed mb-4">
               Penerapan algoritma Minimax dengan optimasi Alpha-Beta Pruning
-              pada permainan Tic-Tac-Toe sederhana.
+              pada Tic-Tac-Toe.
             </p>
-            <div class="flex flex-wrap gap-2">
+            <div class="flex gap-2 flex-wrap">
               <span
-                class="tag text-xs font-medium bg-blue-50 text-primary px-3 py-1 rounded-full border border-blue-100"
+                class="text-[11px] bg-amber-50 text-pr px-3 py-1 rounded-full border border-amber-100"
+                >Minimax</span
               >
-                <i class="fa-solid fa-gamepad text-[10px]"></i> Minimax
-              </span>
               <span
-                class="tag text-xs font-medium bg-blue-50 text-primary px-3 py-1 rounded-full border border-blue-100"
+                class="text-[11px] bg-amber-50 text-pr px-3 py-1 rounded-full border border-amber-100"
+                >Alpha-Beta</span
               >
-                <i class="fa-solid fa-scissors text-[10px]"></i> Alpha-Beta
-              </span>
               <span
-                class="tag text-xs font-medium bg-green-50 text-green-600 px-3 py-1 rounded-full border border-green-100"
+                class="text-[11px] bg-green-50 text-green-600 px-3 py-1 rounded-full border border-green-100"
+                ><i class="fa-solid fa-check mr-1"></i>Selesai</span
               >
-                <i class="fa-solid fa-circle-check text-[10px]"></i> Selesai
-              </span>
             </div>
           </a>
 
-          <!-- Placeholder -->
           <div
-            class="task-card bg-white/60 rounded-4xl p-7 border-2 border-dashed border-blue-200 flex flex-col items-center justify-center text-center gap-3 min-h-[180px] col-span-1 sm:col-span-2"
+            class="sm:col-span-2 bg-amber-50/60 border-2 border-dashed border-amber-200 rounded-3xl p-6 flex items-center justify-center gap-3 text-stone-400 text-sm"
           >
-            <div
-              class="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center"
-            >
-              <i class="fa-solid fa-plus text-primary"></i>
-            </div>
-            <p class="text-slate-400 text-sm font-medium">
-              Tugas berikutnya akan ditampilkan di sini
-            </p>
+            <i class="fa-solid fa-plus text-amber-300 text-lg"></i> Tugas
+            berikutnya akan ditambahkan di sini
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ───────────── TENTANG ───────────── -->
-    <section id="tentang" class="py-20 px-6 bg-white border-y border-blue-100">
-      <div
-        class="max-w-5xl mx-auto flex flex-col md:flex-row gap-12 items-start"
-      >
-        <!-- Info -->
+    <!-- TENTANG -->
+    <section id="tentang" class="py-16 px-6">
+      <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-12">
         <div class="flex-1">
           <span
-            class="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-4"
+            class="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-pr text-xs font-semibold px-4 py-1.5 rounded-full mb-4"
+            ><i class="fa-solid fa-user"></i> Tentang Saya</span
           >
-            <i class="fa-solid fa-user"></i> Tentang Saya
-          </span>
-          <h2 class="text-3xl font-extrabold text-slate-900 mb-4">
+          <h2 class="font-serif text-3xl font-bold text-stone-900 mb-4">
             Siapa Saya?
           </h2>
-          <p class="text-slate-500 leading-relaxed mb-6 text-sm">
+          <p class="text-stone-500 text-sm leading-relaxed mb-6">
             Mahasiswa aktif program studi Sistem Informasi di
-            <strong class="text-slate-700">STMIK Mardira Indonesia</strong>,
-            saat ini berada di semester 6. Portfolio ini dibuat sebagai media
-            pengumpulan tugas mata kuliah
-            <strong class="text-slate-700">Kecerdasan Buatan</strong> sesuai
-            instruksi dosen.
+            <strong class="text-stone-700">STMIK Mardira Indonesia</strong>.
+            Portfolio ini dibuat sebagai media pengumpulan tugas mata kuliah
+            <strong class="text-stone-700">Kecerdasan Buatan</strong>.
           </p>
-
-          <!-- Detail -->
           <div class="space-y-3 text-sm">
             <div class="flex items-center gap-3">
               <span
-                class="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-primary flex-shrink-0"
-              >
-                <i class="fa-solid fa-user text-xs"></i>
-              </span>
+                class="w-8 h-8 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-pr flex-shrink-0"
+                ><i class="fa-solid fa-user text-xs"></i
+              ></span>
               <div>
-                <span class="text-slate-400 text-xs">Nama</span>
-                <p class="font-semibold text-slate-800">Ayu Indah Fitriani</p>
+                <p class="text-[11px] text-stone-400">Nama</p>
+                <p class="font-semibold text-stone-800">Ayu Indah</p>
               </div>
             </div>
             <div class="flex items-center gap-3">
               <span
-                class="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-primary flex-shrink-0"
-              >
-                <i class="fa-solid fa-id-card text-xs"></i>
-              </span>
+                class="w-8 h-8 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-pr flex-shrink-0"
+                ><i class="fa-solid fa-id-card text-xs"></i
+              ></span>
               <div>
-                <span class="text-slate-400 text-xs">NIM</span>
-                <p class="font-semibold text-slate-800">23110491</p>
+                <p class="text-[11px] text-stone-400">NIM</p>
+                <p class="font-semibold text-stone-800">23110491</p>
               </div>
             </div>
             <div class="flex items-center gap-3">
               <span
-                class="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-primary flex-shrink-0"
-              >
-                <i class="fa-solid fa-school text-xs"></i>
-              </span>
+                class="w-8 h-8 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-pr flex-shrink-0"
+                ><i class="fa-solid fa-school text-xs"></i
+              ></span>
               <div>
-                <span class="text-slate-400 text-xs">Perguruan Tinggi</span>
-                <p class="font-semibold text-slate-800">
+                <p class="text-[11px] text-stone-400">Kampus</p>
+                <p class="font-semibold text-stone-800">
                   STMIK Mardira Indonesia
                 </p>
               </div>
             </div>
             <div class="flex items-center gap-3">
               <span
-                class="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-primary flex-shrink-0"
-              >
-                <i class="fa-solid fa-layer-group text-xs"></i>
-              </span>
+                class="w-8 h-8 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-pr flex-shrink-0"
+                ><i class="fa-solid fa-layer-group text-xs"></i
+              ></span>
               <div>
-                <span class="text-slate-400 text-xs">Kelas / Semester</span>
-                <p class="font-semibold text-slate-800">J2023 / Semester 6</p>
+                <p class="text-[11px] text-stone-400">Kelas / Semester</p>
+                <p class="font-semibold text-stone-800">J2023 / Semester 6</p>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Skills -->
-        <div class="flex-1 w-full">
-          <h3 class="font-bold text-slate-800 mb-5">Topik yang Dipelajari</h3>
-          <div class="space-y-4" id="skillBars">
-            <!-- Rendered by JS -->
-          </div>
+        <div class="flex-1">
+          <h3 class="font-semibold text-stone-800 mb-5">
+            Topik yang Dipelajari
+          </h3>
+          <div class="space-y-4" id="skills"></div>
         </div>
       </div>
     </section>
 
-    <!-- ───────────── KONTAK ───────────── -->
-    <section id="kontak" class="py-20 px-6">
+    <!-- KONTAK -->
+    <section id="kontak" class="py-16 px-6 bg-white/60">
       <div class="max-w-5xl mx-auto text-center">
-        <span
-          class="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-4"
-        >
-          <i class="fa-solid fa-envelope"></i> Kontak
-        </span>
-        <h2 class="text-3xl font-extrabold text-slate-900 mb-3">
+        <h2 class="font-serif text-3xl font-bold text-stone-900 mb-2">
           Hubungi Saya
         </h2>
-        <p class="text-slate-500 text-sm mb-10">
-          Tersedia di berbagai platform
-        </p>
-
+        <p class="text-stone-500 text-sm mb-8">Tersedia di berbagai platform</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a
             href="mailto:email@example.com"
-            class="flex items-center gap-3 bg-white border border-blue-100 hover:border-primary hover:shadow-card text-slate-700 hover:text-primary font-semibold px-6 py-3 rounded-2xl transition-all shadow-soft text-sm"
+            class="flex items-center gap-2 bg-white border border-amber-200 hover:border-pr text-stone-700 hover:text-pr font-semibold px-5 py-3 rounded-2xl transition-all text-sm"
+            ><i class="fa-solid fa-envelope text-pr"></i> email@example.com</a
           >
-            <i class="fa-solid fa-envelope text-primary"></i> email@example.com
-          </a>
           <a
-            href="https://github.com/"
-            class="flex items-center gap-3 bg-white border border-blue-100 hover:border-primary hover:shadow-card text-slate-700 hover:text-primary font-semibold px-6 py-3 rounded-2xl transition-all shadow-soft text-sm"
+            href="#"
+            class="flex items-center gap-2 bg-white border border-amber-200 hover:border-pr text-stone-700 hover:text-pr font-semibold px-5 py-3 rounded-2xl transition-all text-sm"
+            ><i class="fa-brands fa-github"></i> GitHub</a
           >
-            <i class="fa-brands fa-github text-slate-800"></i> GitHub
-          </a>
           <a
-            href="https://instagram.com/"
-            class="flex items-center gap-3 bg-white border border-blue-100 hover:border-primary hover:shadow-card text-slate-700 hover:text-primary font-semibold px-6 py-3 rounded-2xl transition-all shadow-soft text-sm"
+            href="#"
+            class="flex items-center gap-2 bg-white border border-amber-200 hover:border-pr text-stone-700 hover:text-pr font-semibold px-5 py-3 rounded-2xl transition-all text-sm"
+            ><i class="fa-brands fa-instagram text-pink-400"></i> Instagram</a
           >
-            <i class="fa-brands fa-instagram text-pink-500"></i> Instagram
-          </a>
         </div>
       </div>
     </section>
 
-    <!-- ───────────── FOOTER ───────────── -->
     <footer
-      class="bg-white border-t border-blue-100 py-8 px-6 text-center text-slate-400 text-xs"
+      class="bg-white border-t border-amber-100 py-6 text-center text-stone-400 text-xs"
     >
-      <div class="flex items-center justify-center gap-2 mb-1">
-        <span
-          class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center text-white text-[10px]"
-        >
-          <i class="fa-solid fa-brain"></i>
-        </span>
-        <span class="font-bold text-slate-700 text-sm">Ayu Portfolio</span>
-      </div>
-      <p>© 2026 Ayu Indah Fitriani — STMIK Mardira Indonesia · Kelas J2023</p>
+      <p>© 2026 Ayu Indah — STMIK Mardira Indonesia · Kelas J2023</p>
     </footer>
 
     <script>
-      // Mobile menu
-      document.getElementById("menuBtn").addEventListener("click", () => {
-        document.getElementById("mobileMenu").classList.toggle("hidden");
-      });
-
-      // Skill bars
+      document.getElementById("mb").onclick = () =>
+        document.getElementById("mm").classList.toggle("hidden");
       const skills = [
-        { name: "Algoritma Pencarian (BFS / DFS)", pct: 85 },
-        { name: "Minimax & Alpha-Beta Pruning", pct: 75 },
-        { name: "Logika Fuzzy", pct: 60 },
-        { name: "Machine Learning Dasar", pct: 50 },
+        { n: "Algoritma Pencarian (BFS / DFS)", p: 85 },
+        { n: "Minimax & Alpha-Beta Pruning", p: 75 },
+        { n: "Logika Fuzzy", p: 60 },
+        { n: "Machine Learning Dasar", p: 50 },
       ];
-
-      const container = document.getElementById("skillBars");
+      const c = document.getElementById("skills");
       skills.forEach((s) => {
-        container.innerHTML += `
-        <div>
-          <div class="flex justify-between text-xs mb-1.5">
-            <span class="font-medium text-slate-700">${s.name}</span>
-            <span class="font-mono text-primary">${s.pct}%</span>
-          </div>
-          <div class="w-full bg-blue-50 rounded-full h-2.5 overflow-hidden border border-blue-100">
-            <div class="skill-bar h-full bg-gradient-to-r from-primary-light to-primary rounded-full" style="width:0%" data-target="${s.pct}%"></div>
-          </div>
-        </div>`;
+        c.innerHTML += `<div><div class="flex justify-between text-xs mb-1.5"><span class="font-medium text-stone-700">${s.n}</span><span class="text-pr font-semibold">${s.p}%</span></div><div class="w-full bg-amber-50 rounded-full h-2.5 border border-amber-100 overflow-hidden"><div class="skill-bar h-full bg-gradient-to-r from-pr-light to-pr rounded-full" style="width:0" data-t="${s.p}%"></div></div></div>`;
       });
-
-      // Animate skill bars on scroll
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              document.querySelectorAll(".skill-bar").forEach((bar) => {
-                bar.style.width = bar.dataset.target;
-              });
-            }
-          });
+      new IntersectionObserver(
+        (e) => {
+          if (e[0].isIntersecting)
+            document
+              .querySelectorAll(".skill-bar")
+              .forEach((b) => (b.style.width = b.dataset.t));
         },
         { threshold: 0.3 },
-      );
-      const skillSection = document.getElementById("tentang");
-      if (skillSection) observer.observe(skillSection);
+      ).observe(document.getElementById("tentang"));
     </script>
   </body>
 </html>

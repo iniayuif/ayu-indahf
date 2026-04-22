@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tugas 2 – Minimax & Alpha-Beta | Ayu Portfolio</title>
+    <title>Tugas 2 – Minimax | Ayu Indah</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script>
@@ -18,20 +18,11 @@
         theme: {
           extend: {
             colors: {
-              primary: {
-                DEFAULT: "#2563EB",
-                light: "#3B82F6",
-                dark: "#1D4ED8",
-              },
+              pr: { DEFAULT: "#C8956A", light: "#DEB897", dark: "#A0714A" },
             },
             fontFamily: {
-              sans: ["Plus Jakarta Sans", "sans-serif"],
-              mono: ["Space Mono", "monospace"],
-            },
-            borderRadius: { "3xl": "1.5rem", "4xl": "2rem" },
-            boxShadow: {
-              card: "0 4px 24px 0 rgba(37,99,235,0.10)",
-              soft: "0 2px 12px 0 rgba(37,99,235,0.08)",
+              serif: ["Lora", "serif"],
+              sans: ["DM Sans", "sans-serif"],
             },
           },
         },
@@ -39,250 +30,268 @@
     </script>
     <style>
       body {
-        background: #f0f6ff;
-        font-family: "Plus Jakarta Sans", sans-serif;
+        background: #fdf6ef;
+        font-family: "DM Sans", sans-serif;
       }
       pre,
       code {
-        font-family: "Space Mono", monospace;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
       }
       .fade-up {
         opacity: 0;
         transform: translateY(20px);
-        animation: fadeUp 0.6s forwards;
+        animation: fu 0.6s forwards;
       }
-      @keyframes fadeUp {
+      @keyframes fu {
         to {
           opacity: 1;
           transform: none;
         }
       }
-      .delay-1 {
+      .d1 {
         animation-delay: 0.1s;
       }
-      .delay-2 {
+      .d2 {
         animation-delay: 0.2s;
       }
-      .delay-3 {
-        animation-delay: 0.3s;
-      }
-
-      /* Board */
       .cell {
-        width: 90px;
-        height: 90px;
+        width: 80px;
+        height: 80px;
         background: white;
-        border-radius: 20px;
-        border: 2px solid #bfdbfe;
-        font-size: 2.2rem;
+        border-radius: 16px;
+        border: 2px solid #f5e6d3;
+        font-size: 2rem;
         font-weight: 900;
-        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition:
-          background 0.18s,
-          border-color 0.18s,
-          transform 0.15s;
-        user-select: none;
+        cursor: pointer;
+        transition: all 0.15s;
       }
       .cell:hover:not(.taken) {
-        background: #eff6ff;
-        border-color: #93c5fd;
+        background: #fdf6ef;
+        border-color: #c8956a;
         transform: scale(1.04);
       }
       .cell.taken {
         cursor: default;
       }
-      .cell.x-mark {
-        color: #2563eb;
+      .cell.xm {
+        color: #c8956a;
       }
-      .cell.o-mark {
-        color: #f59e0b;
+      .cell.om {
+        color: #a0714a;
       }
       .cell.win {
-        background: #eff6ff;
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.22);
-      }
-
-      /* Score box */
-      .score-box {
-        transition: transform 0.25s;
-      }
-      .score-box.active {
-        transform: scale(1.06);
-        border-color: #2563eb !important;
-      }
-
-      /* log */
-      #mmLog {
-        height: 110px;
-        overflow-y: auto;
-        background: #0f172a;
-        color: #7dd3fc;
-        font-family: "Space Mono", monospace;
-        font-size: 11px;
-        padding: 12px 16px;
-        border-radius: 16px;
-        line-height: 1.7;
+        background: #fdf0e6;
+        border-color: #c8956a;
+        box-shadow: 0 0 0 3px rgba(200, 149, 106, 0.2);
       }
     </style>
   </head>
-  <body class="min-h-screen">
-    <!-- NAVBAR -->
+  <body class="min-h-screen text-stone-800">
     <header
-      class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-blue-100 shadow-soft"
+      class="sticky top-0 z-50 bg-[#FDF6EF]/90 backdrop-blur border-b border-amber-100"
     >
       <div
-        class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between"
+        class="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between"
       >
         <a
           href="index.html"
-          class="flex items-center gap-2 font-mono font-bold text-primary text-lg tracking-tight"
+          class="flex items-center gap-2 font-serif font-bold text-pr"
+          ><span
+            class="w-7 h-7 rounded-xl bg-pr flex items-center justify-center text-white text-xs"
+            ><i class="fa-solid fa-brain"></i
+          ></span>
+          Ayu · KB</a
         >
-          <span
-            class="w-8 h-8 rounded-2xl bg-primary flex items-center justify-center text-white text-sm"
-          >
-            <i class="fa-solid fa-brain"></i>
-          </span>
-          Ayu<span class="text-slate-400">.portfolio</span>
-        </a>
-        <nav class="flex items-center gap-4 text-sm">
+        <div class="flex items-center gap-3 text-sm">
           <a
             href="tugas1.html"
-            class="text-slate-500 hover:text-primary transition-colors"
+            class="text-stone-400 hover:text-pr transition-colors"
+            ><i class="fa-solid fa-arrow-left mr-1"></i>Tugas 1</a
           >
-            <i class="fa-solid fa-arrow-left mr-1.5"></i>Tugas 1
-          </a>
           <a
             href="index.html"
-            class="bg-primary text-white px-4 py-2 rounded-2xl font-semibold hover:bg-primary-dark transition-colors text-xs"
+            class="bg-pr text-white px-4 py-1.5 rounded-xl font-semibold text-xs hover:bg-pr-dark transition-colors"
+            ><i class="fa-solid fa-house mr-1"></i>Beranda</a
           >
-            <i class="fa-solid fa-house mr-1"></i>Beranda
-          </a>
-        </nav>
+        </div>
       </div>
     </header>
 
-    <!-- HERO -->
-    <section class="max-w-5xl mx-auto px-6 pt-14 pb-8">
-      <div class="fade-up flex items-center gap-3 mb-4">
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-8">
+      <!-- Header -->
+      <div class="fade-up">
         <span
-          class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-soft"
+          class="text-xs font-semibold bg-amber-50 border border-amber-200 text-pr px-3 py-1 rounded-full"
+          >Tugas 2</span
         >
-          <i class="fa-solid fa-chess text-white"></i>
-        </span>
-        <div>
-          <span
-            class="text-xs font-mono text-blue-400 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full"
-            >Tugas 2</span
+        <h1 class="font-serif text-3xl font-bold text-stone-900 mt-2">
+          Minimax & Alpha-Beta Pruning
+        </h1>
+        <p class="text-stone-500 text-sm mt-1">
+          Algoritma keputusan optimal untuk permainan dua pemain (Tic-Tac-Toe)
+        </p>
+      </div>
+
+      <!-- Penjelasan -->
+      <div class="fade-up d1 grid sm:grid-cols-2 gap-4">
+        <div class="bg-white rounded-3xl p-6 border border-amber-100">
+          <div
+            class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pr-light to-pr flex items-center justify-center mb-3"
           >
-          <h1 class="text-2xl font-extrabold text-slate-900">
-            Minimax & Alpha-Beta Pruning
-          </h1>
+            <i class="fa-solid fa-arrows-up-down text-white"></i>
+          </div>
+          <h3 class="font-serif font-bold text-stone-800 mb-2">Minimax</h3>
+          <p class="text-stone-500 text-xs leading-relaxed">
+            Memodelkan dua pemain: <strong>Maximizer</strong> (AI) dan
+            <strong>Minimizer</strong> (lawan). Menelusuri seluruh pohon
+            kemungkinan untuk menemukan langkah terbaik.
+          </p>
+        </div>
+        <div class="bg-white rounded-3xl p-6 border border-amber-100">
+          <div
+            class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-300 to-pr flex items-center justify-center mb-3"
+          >
+            <i class="fa-solid fa-scissors text-white"></i>
+          </div>
+          <h3 class="font-serif font-bold text-stone-800 mb-2">
+            Alpha-Beta Pruning
+          </h3>
+          <p class="text-stone-500 text-xs leading-relaxed">
+            Optimasi Minimax: memangkas cabang yang tidak relevan dengan batas
+            <strong>alpha</strong> dan <strong>beta</strong>, tanpa mengubah
+            hasil akhir.
+          </p>
         </div>
       </div>
-      <div class="fade-up delay-1 flex flex-wrap gap-2">
-        <span
-          class="text-xs bg-blue-50 border border-blue-100 text-primary px-3 py-1 rounded-full font-medium"
-          ><i class="fa-solid fa-calendar mr-1"></i>April 2026</span
-        >
-        <span
-          class="text-xs bg-green-50 border border-green-100 text-green-600 px-3 py-1 rounded-full font-medium"
-          ><i class="fa-solid fa-circle-check mr-1"></i>Selesai</span
-        >
-        <span
-          class="text-xs bg-blue-50 border border-blue-100 text-primary px-3 py-1 rounded-full font-medium"
-          ><i class="fa-brands fa-js mr-1"></i>JavaScript</span
-        >
-      </div>
-    </section>
 
-    <main class="max-w-5xl mx-auto px-6 pb-20 space-y-10">
-      <!-- DESCRIPTION -->
-      <section
-        class="fade-up delay-2 bg-white rounded-4xl shadow-card border border-blue-50 p-8"
-      >
-        <h2
-          class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"
-        >
-          <i class="fa-solid fa-file-lines text-primary"></i> Deskripsi Tugas
+      <!-- Game -->
+      <div class="fade-up d2 bg-white rounded-3xl p-6 border border-amber-100">
+        <h2 class="font-serif font-bold text-stone-800 mb-1">
+          <i class="fa-solid fa-gamepad text-pr mr-2"></i>Demo: Tic-Tac-Toe vs
+          AI
         </h2>
-        <p class="text-slate-600 text-sm leading-relaxed mb-4">
-          Tugas ini bertujuan untuk memahami dan mengimplementasikan algoritma
-          <strong>Minimax</strong> yang digunakan pada permainan dua pemain
-          bergiliran (zero-sum game), serta mengoptimalkannya dengan teknik
-          <strong>Alpha-Beta Pruning</strong> untuk memangkas cabang pohon
-          permainan yang tidak perlu dievaluasi. Kasus uji menggunakan permainan
-          <strong>Tic-Tac-Toe 3×3</strong>.
+        <p class="text-stone-400 text-xs mb-5">
+          Kamu = <strong class="text-pr">X</strong> &nbsp;|&nbsp; AI =
+          <strong class="text-amber-700">O</strong> &nbsp;·&nbsp; Klik sel untuk
+          bermain!
         </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="bg-blue-50 rounded-3xl p-5 border border-blue-100">
-            <h3 class="font-bold text-primary text-sm mb-2">
-              <i class="fa-solid fa-arrows-up-down mr-2"></i>Minimax
-            </h3>
-            <p class="text-slate-600 text-xs leading-relaxed">
-              Algoritma yang memodelkan dua pemain —
-              <strong>Maximizer</strong> (AI) yang berusaha mendapat skor
-              tertinggi dan <strong>Minimizer</strong> (lawan) yang berusaha
-              meminimalkan skor AI. Menjelajahi seluruh pohon permainan.
-            </p>
+        <div class="flex flex-col sm:flex-row gap-6 items-start">
+          <div class="flex flex-col items-center gap-4">
+            <div
+              id="status"
+              class="text-sm font-semibold text-pr bg-amber-50 border border-amber-200 px-5 py-2 rounded-full"
+            >
+              Giliran kamu!
+            </div>
+            <div id="board" class="grid grid-cols-3 gap-2.5"></div>
+            <div class="flex gap-3">
+              <button
+                id="ng"
+                class="bg-pr hover:bg-pr-dark text-white font-semibold text-xs px-5 py-2 rounded-xl transition-all"
+              >
+                <i class="fa-solid fa-rotate mr-1"></i>Ulang
+              </button>
+            </div>
+            <div class="flex gap-4 text-xs text-stone-500">
+              <span>Kamu: <strong class="text-pr" id="sx">0</strong></span>
+              <span>AI: <strong class="text-amber-700" id="so">0</strong></span>
+            </div>
           </div>
-          <div class="bg-blue-50 rounded-3xl p-5 border border-blue-100">
-            <h3 class="font-bold text-primary text-sm mb-2">
-              <i class="fa-solid fa-scissors mr-2"></i>Alpha-Beta Pruning
-            </h3>
-            <p class="text-slate-600 text-xs leading-relaxed">
-              Optimasi Minimax dengan memangkas (prune) cabang yang sudah
-              dipastikan tidak akan dipilih, menggunakan dua nilai batas:
-              <strong>alpha</strong> (nilai terbaik Maximizer) dan
-              <strong>beta</strong> (nilai terbaik Minimizer).
-            </p>
+          <div class="flex-1 space-y-3 w-full">
+            <div class="grid grid-cols-2 gap-3">
+              <div
+                class="bg-amber-50 border border-amber-100 rounded-2xl p-3 text-center"
+              >
+                <p class="text-lg font-extrabold text-pr" id="nodes">0</p>
+                <p class="text-[11px] text-stone-400">Node dievaluasi</p>
+              </div>
+              <div
+                class="bg-amber-50 border border-amber-100 rounded-2xl p-3 text-center"
+              >
+                <p class="text-lg font-extrabold text-pr" id="pruned">0</p>
+                <p class="text-[11px] text-stone-400">Cabang dipangkas</p>
+              </div>
+            </div>
+            <div
+              class="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-xs text-stone-600 leading-relaxed"
+            >
+              <strong class="text-pr"
+                ><i class="fa-solid fa-info-circle mr-1"></i>Info:</strong
+              >
+              Setiap giliran AI, Minimax menelusuri semua kemungkinan papan.
+              Alpha-Beta memangkas cabang bila α ≥ β, menghemat komputasi tanpa
+              mengubah keputusan optimal.
+            </div>
           </div>
         </div>
-      </section>
-      <!-- CONCLUSION -->
-      <section
-        class="bg-gradient-to-br from-primary to-blue-700 rounded-4xl p-8 text-white shadow-card"
-      >
-        <h2 class="text-lg font-bold mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-lightbulb"></i> Kesimpulan
-        </h2>
-        <p class="text-blue-100 text-sm leading-relaxed">
-          Algoritma <strong class="text-white">Minimax</strong> mampu memainkan
-          Tic-Tac-Toe secara optimal dengan mengevaluasi semua kemungkinan
-          langkah. Namun, tanpa optimasi, jumlah node yang dievaluasi bisa
-          mencapai ratusan. Dengan
-          <strong class="text-white">Alpha-Beta Pruning</strong>, cabang yang
-          tidak relevan dipangkas, sehingga efisiensi meningkat signifikan —
-          dalam kasus terbaik mencapai <em>O(b^(d/2))</em> dibandingkan
-          <em>O(b^d)</em> pada Minimax murni, tanpa mengubah keputusan optimal
-          AI.
-        </p>
-      </section>
-    </main>
+      </div>
 
-    <!-- FOOTER -->
+      <!-- Kode -->
+      <div class="bg-white rounded-3xl p-6 border border-amber-100">
+        <h2 class="font-serif font-bold text-stone-800 mb-4">
+          <i class="fa-solid fa-code text-pr mr-2"></i>Kode Alpha-Beta Pruning
+          (Python)
+        </h2>
+        <pre
+          class="bg-stone-900 text-stone-100 rounded-2xl p-5 overflow-x-auto leading-relaxed text-xs"
+        ><code><span class="text-green-400">def</span> <span class="text-yellow-200">minimax</span>(board, depth, alpha, beta, is_max):
+    score = evaluate(board)
+    <span class="text-amber-300">if</span> score != <span class="text-blue-400">0</span> <span class="text-amber-300">or not</span> moves_left(board):
+        <span class="text-amber-300">return</span> score
+
+    <span class="text-amber-300">if</span> is_max:
+        best = <span class="text-blue-400">-1000</span>
+        <span class="text-amber-300">for</span> i, j <span class="text-amber-300">in</span> empty_cells(board):
+            board[i][j] = <span class="text-green-300">'O'</span>
+            best = max(best, minimax(board, depth+<span class="text-blue-400">1</span>, alpha, beta, <span class="text-blue-400">False</span>))
+            board[i][j] = <span class="text-green-300">'_'</span>
+            alpha = max(alpha, best)
+            <span class="text-amber-300">if</span> beta <= alpha: <span class="text-stone-400">break</span>  <span class="text-stone-400"># ✂ pruning</span>
+        <span class="text-amber-300">return</span> best
+    <span class="text-amber-300">else</span>:
+        best = <span class="text-blue-400">1000</span>
+        <span class="text-amber-300">for</span> i, j <span class="text-amber-300">in</span> empty_cells(board):
+            board[i][j] = <span class="text-green-300">'X'</span>
+            best = min(best, minimax(board, depth+<span class="text-blue-400">1</span>, alpha, beta, <span class="text-blue-400">True</span>))
+            board[i][j] = <span class="text-green-300">'_'</span>
+            beta = min(beta, best)
+            <span class="text-amber-300">if</span> beta <= alpha: <span class="text-stone-400">break</span>  <span class="text-stone-400"># ✂ pruning</span>
+        <span class="text-amber-300">return</span> best</code></pre>
+      </div>
+
+      <!-- Kesimpulan -->
+      <div
+        class="bg-gradient-to-br from-pr to-pr-dark rounded-3xl p-7 text-white"
+      >
+        <h2 class="font-serif font-bold text-lg mb-2">
+          <i class="fa-solid fa-lightbulb mr-2"></i>Kesimpulan
+        </h2>
+        <p class="text-amber-100 text-sm leading-relaxed">
+          Minimax menghasilkan keputusan optimal untuk permainan dua pemain.
+          Alpha-Beta Pruning meningkatkan efisiensi dengan memangkas cabang
+          tidak relevan, mencapai kompleksitas O(b^(d/2)) pada kasus terbaik
+          dibanding O(b^d) Minimax murni.
+        </p>
+      </div>
+    </div>
+
     <footer
-      class="bg-white border-t border-blue-100 py-6 px-6 text-center text-slate-400 text-xs"
+      class="bg-white border-t border-amber-100 py-5 text-center text-stone-400 text-xs"
     >
-      <p>
-        © 2026 Ayu Indah Fitriani — STMIK Mardira Indonesia · Tugas Kecerdasan
-        Buatan
-      </p>
+      © 2026 Ayu Indah — STMIK Mardira Indonesia
     </footer>
 
     <script>
-      // ── Tic-Tac-Toe Engine ──
-      let board = Array(9).fill(null);
-      let gameOver = false;
-      let scores = { X: 0, O: 0 };
-      let nodesEvaluated = 0,
-        pruned = 0,
-        maxDepth = 0;
-
-      const WIN_LINES = [
+      let board = Array(9).fill(null),
+        over = false,
+        sc = { X: 0, O: 0 },
+        nodes = 0,
+        pruned = 0;
+      const WL = [
         [0, 1, 2],
         [3, 4, 5],
         [6, 7, 8],
@@ -292,39 +301,30 @@
         [0, 4, 8],
         [2, 4, 6],
       ];
-
-      function checkWinner(b) {
-        for (const [a, bb, c] of WIN_LINES) {
-          if (b[a] && b[a] === b[bb] && b[a] === b[c])
-            return { winner: b[a], line: [a, bb, c] };
-        }
-        if (b.every((c) => c)) return { winner: "draw", line: [] };
+      function win(b) {
+        for (const [a, c, d] of WL)
+          if (b[a] && b[a] === b[c] && b[a] === b[d])
+            return { w: b[a], l: [a, c, d] };
+        if (b.every((v) => v)) return { w: "draw", l: [] };
         return null;
       }
-
-      function evaluate(b) {
-        const r = checkWinner(b);
-        if (!r) return 0;
-        if (r.winner === "O") return 10;
-        if (r.winner === "X") return -10;
-        return 0;
+      function ev(b) {
+        const r = win(b);
+        return r ? (r.w === "O" ? 10 : r.w === "X" ? -10 : 0) : 0;
       }
-
-      function minimax(b, depth, alpha, beta, isMax) {
-        nodesEvaluated++;
-        if (depth > maxDepth) maxDepth = depth;
-        const score = evaluate(b);
-        if (score !== 0 || b.every((c) => c)) return score;
-
-        if (isMax) {
+      function mm(b, a, bt, mx) {
+        nodes++;
+        const s = ev(b);
+        if (s || b.every((v) => v)) return s;
+        if (mx) {
           let best = -Infinity;
           for (let i = 0; i < 9; i++) {
             if (!b[i]) {
               b[i] = "O";
-              best = Math.max(best, minimax(b, depth + 1, alpha, beta, false));
+              best = Math.max(best, mm(b, a, bt, false));
               b[i] = null;
-              alpha = Math.max(alpha, best);
-              if (beta <= alpha) {
+              a = Math.max(a, best);
+              if (bt <= a) {
                 pruned++;
                 break;
               }
@@ -336,10 +336,10 @@
           for (let i = 0; i < 9; i++) {
             if (!b[i]) {
               b[i] = "X";
-              best = Math.min(best, minimax(b, depth + 1, alpha, beta, true));
+              best = Math.min(best, mm(b, a, bt, true));
               b[i] = null;
-              beta = Math.min(beta, best);
-              if (beta <= alpha) {
+              bt = Math.min(bt, best);
+              if (bt <= a) {
                 pruned++;
                 break;
               }
@@ -348,169 +348,87 @@
           return best;
         }
       }
-
-      function bestMove(b) {
-        nodesEvaluated = 0;
+      function best() {
+        nodes = 0;
         pruned = 0;
-        maxDepth = 0;
-        let bestVal = -Infinity,
-          bestIdx = -1;
+        let bv = -Infinity,
+          bi = -1;
         for (let i = 0; i < 9; i++) {
-          if (!b[i]) {
-            b[i] = "O";
-            const v = minimax(b, 0, -Infinity, Infinity, false);
-            b[i] = null;
-            if (v > bestVal) {
-              bestVal = v;
-              bestIdx = i;
+          if (!board[i]) {
+            board[i] = "O";
+            const v = mm(board, -Infinity, Infinity, false);
+            board[i] = null;
+            if (v > bv) {
+              bv = v;
+              bi = i;
             }
           }
         }
-        return bestIdx;
+        document.getElementById("nodes").textContent = nodes;
+        document.getElementById("pruned").textContent = pruned;
+        return bi;
       }
-
-      function mmLog(msg) {
-        const el = document.getElementById("mmLog");
-        el.innerHTML += `<div>${msg}</div>`;
-        el.scrollTop = el.scrollHeight;
-      }
-
-      function updateStats() {
-        document.getElementById("statNodes").textContent = nodesEvaluated;
-        document.getElementById("statPruned").textContent = pruned;
-        document.getElementById("statDepth").textContent = maxDepth;
-      }
-
-      function setStatus(msg, color = "text-primary") {
-        const el = document.getElementById("status");
-        el.className = `text-sm font-semibold bg-blue-50 border border-blue-100 px-5 py-2 rounded-full ${color}`;
-        el.textContent = msg;
-      }
-
-      function renderBoard(winLine = []) {
-        const boardEl = document.getElementById("board");
-        boardEl.innerHTML = "";
-        board.forEach((val, i) => {
-          const cell = document.createElement("div");
-          cell.className =
+      function render(wl = []) {
+        const b = document.getElementById("board");
+        b.innerHTML = "";
+        board.forEach((v, i) => {
+          const c = document.createElement("div");
+          c.className =
             "cell" +
-            (val ? " taken" : "") +
-            (val === "X" ? " x-mark" : val === "O" ? " o-mark" : "") +
-            (winLine.includes(i) ? " win" : "");
-          cell.textContent = val === "X" ? "✕" : val === "O" ? "○" : "";
-          if (!val && !gameOver)
-            cell.addEventListener("click", () => humanMove(i));
-          boardEl.appendChild(cell);
+            (v ? " taken" : "") +
+            (v === "X" ? " xm" : v === "O" ? " om" : "") +
+            (wl.includes(i) ? " win" : "");
+          c.textContent = v === "X" ? "✕" : v === "O" ? "○" : "";
+          if (!v && !over) c.onclick = () => move(i);
+          b.appendChild(c);
         });
       }
-
-      function humanMove(i) {
-        if (board[i] || gameOver) return;
+      function setS(t, cls = "text-pr") {
+        const el = document.getElementById("status");
+        el.className = `text-sm font-semibold bg-amber-50 border border-amber-200 px-5 py-2 rounded-full ${cls}`;
+        el.textContent = t;
+      }
+      function end(r) {
+        over = true;
+        if (r.w === "X") {
+          sc.X++;
+          document.getElementById("sx").textContent = sc.X;
+          setS("🎉 Kamu menang!", "text-green-600");
+        } else if (r.w === "O") {
+          sc.O++;
+          document.getElementById("so").textContent = sc.O;
+          setS("🤖 AI menang!", "text-red-500");
+        } else setS("🤝 Seri!", "text-stone-500");
+        render(r.l);
+      }
+      function move(i) {
+        if (board[i] || over) return;
         board[i] = "X";
-        renderBoard();
-
-        const res = checkWinner(board);
-        if (res) {
-          endGame(res);
+        render();
+        const r = win(board);
+        if (r) {
+          end(r);
           return;
         }
-
-        setStatus("AI sedang berpikir...", "text-yellow-600");
-        document.getElementById("scoreX").classList.remove("active");
-        document.getElementById("scoreO").classList.add("active");
-
+        setS("AI berpikir...", "text-amber-700");
         setTimeout(() => {
-          const diff = document.getElementById("difficulty").value;
-          let idx;
-          if (diff === "easy") {
-            const empty = board
-              .map((v, i) => (v ? null : i))
-              .filter((v) => v !== null);
-            idx = empty[Math.floor(Math.random() * empty.length)];
-            nodesEvaluated = Math.floor(Math.random() * 10) + 1;
-            pruned = 0;
-            maxDepth = Math.floor(Math.random() * 3) + 1;
-          } else {
-            idx = bestMove(board);
-          }
-          board[idx] = "O";
-          renderBoard();
-          updateStats();
-          mmLog(
-            `<span style="color:#FCD34D">AI memilih sel ${idx} | Nodes: ${nodesEvaluated} | Pruned: ${pruned} | Depth: ${maxDepth}</span>`,
-          );
-
-          const res2 = checkWinner(board);
-          if (res2) {
-            endGame(res2);
-            return;
-          }
-
-          setStatus("Giliran kamu! Klik sel yang kosong.");
-          document.getElementById("scoreO").classList.remove("active");
-          document.getElementById("scoreX").classList.add("active");
-        }, 350);
+          const bi = best();
+          board[bi] = "O";
+          render();
+          const r2 = win(board);
+          if (r2) end(r2);
+          else setS("Giliran kamu!");
+        }, 300);
       }
-
-      function endGame(res) {
-        gameOver = true;
-        if (res.winner === "X") {
-          scores.X++;
-          document.getElementById("scoreXVal").textContent = scores.X;
-          setStatus("🎉 Kamu menang!", "text-green-600");
-          mmLog('<span style="color:#34D399">Pemain X menang!</span>');
-        } else if (res.winner === "O") {
-          scores.O++;
-          document.getElementById("scoreOVal").textContent = scores.O;
-          setStatus("🤖 AI menang!", "text-red-500");
-          mmLog('<span style="color:#F87171">AI (O) menang!</span>');
-        } else {
-          setStatus("🤝 Seri!", "text-slate-500");
-          mmLog('<span style="color:#94A3B8">Permainan seri.</span>');
-        }
-        renderBoard(res.line || []);
-      }
-
-      function newGame() {
+      document.getElementById("ng").onclick = () => {
         board = Array(9).fill(null);
-        gameOver = false;
-        setStatus("Giliran kamu! Klik sel yang kosong.");
-        document.getElementById("scoreX").classList.add("active");
-        document.getElementById("scoreO").classList.remove("active");
-        renderBoard();
-      }
-
-      document.getElementById("newGame").addEventListener("click", newGame);
-
-      // Code tabs
-      document.querySelectorAll(".code-tab2").forEach((tab) => {
-        tab.addEventListener("click", () => {
-          document
-            .querySelectorAll(".code-block2")
-            .forEach((b) => b.classList.add("hidden"));
-          document.querySelectorAll(".code-tab2").forEach((t) => {
-            t.classList.remove("bg-primary", "text-white");
-            t.classList.add(
-              "bg-blue-50",
-              "border",
-              "border-blue-200",
-              "text-primary",
-            );
-          });
-          document
-            .getElementById("code2-" + tab.dataset.tab)
-            .classList.remove("hidden");
-          tab.classList.add("bg-primary", "text-white");
-          tab.classList.remove(
-            "bg-blue-50",
-            "border",
-            "border-blue-200",
-            "text-primary",
-          );
-        });
-      });
-
-      newGame();
+        over = false;
+        setS("Giliran kamu!");
+        document.getElementById("nodes").textContent = 0;
+        document.getElementById("pruned").textContent = 0;
+        render();
+      };
+      render();
     </script>
   </body>
 </html>

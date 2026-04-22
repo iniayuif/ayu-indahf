@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tugas 1 – Algoritma Pencarian | Ayu Portfolio</title>
+    <title>Tugas 1 – BFS & DFS | Ayu Indah</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script>
@@ -18,20 +18,11 @@
         theme: {
           extend: {
             colors: {
-              primary: {
-                DEFAULT: "#2563EB",
-                light: "#3B82F6",
-                dark: "#1D4ED8",
-              },
+              pr: { DEFAULT: "#C8956A", light: "#DEB897", dark: "#A0714A" },
             },
             fontFamily: {
-              sans: ["Plus Jakarta Sans", "sans-serif"],
-              mono: ["Space Mono", "monospace"],
-            },
-            borderRadius: { "3xl": "1.5rem", "4xl": "2rem" },
-            boxShadow: {
-              card: "0 4px 24px 0 rgba(37,99,235,0.10)",
-              soft: "0 2px 12px 0 rgba(37,99,235,0.08)",
+              serif: ["Lora", "serif"],
+              sans: ["DM Sans", "sans-serif"],
             },
           },
         },
@@ -39,473 +30,271 @@
     </script>
     <style>
       body {
-        background: #f0f6ff;
-        font-family: "Plus Jakarta Sans", sans-serif;
-      }
-      pre,
-      code {
-        font-family: "Space Mono", monospace;
+        background: #fdf6ef;
+        font-family: "DM Sans", sans-serif;
       }
       .fade-up {
         opacity: 0;
         transform: translateY(20px);
-        animation: fadeUp 0.6s forwards;
+        animation: fu 0.6s forwards;
       }
-      @keyframes fadeUp {
+      @keyframes fu {
         to {
           opacity: 1;
           transform: none;
         }
       }
-      .delay-1 {
+      .d1 {
         animation-delay: 0.1s;
       }
-      .delay-2 {
+      .d2 {
         animation-delay: 0.2s;
       }
-      .delay-3 {
-        animation-delay: 0.3s;
-      }
-
-      /* Graph canvas nodes */
-      .node {
-        width: 44px;
-        height: 44px;
-        border-radius: 999px;
-        background: #2563eb;
-        color: #fff;
-        font-weight: 700;
-        font-size: 13px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        transition:
-          background 0.3s,
-          transform 0.3s,
-          box-shadow 0.3s;
-        cursor: default;
-        box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
-        z-index: 2;
-      }
-      .node.visited {
-        background: #1d4ed8;
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
-      }
-      .node.current {
-        background: #f59e0b;
-        box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.35);
-        transform: scale(1.15);
-      }
-      .node.path {
-        background: #10b981;
-        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
-      }
-      .node.unvisited {
-        background: #93c5fd;
-        color: #1d4ed8;
-      }
-
-      /* Log box */
-      #log {
-        height: 120px;
-        overflow-y: auto;
-        background: #0f172a;
-        color: #7dd3fc;
-        font-family: "Space Mono", monospace;
+      pre,
+      code {
+        font-family: "Courier New", monospace;
         font-size: 12px;
-        padding: 12px 16px;
-        border-radius: 16px;
-        line-height: 1.7;
-      }
-      #log .log-visited {
-        color: #60a5fa;
-      }
-      #log .log-current {
-        color: #fcd34d;
-      }
-      #log .log-found {
-        color: #34d399;
-      }
-      #log .log-info {
-        color: #94a3b8;
       }
     </style>
   </head>
-  <body class="min-h-screen">
-    <!-- NAVBAR -->
+  <body class="min-h-screen text-stone-800">
     <header
-      class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-blue-100 shadow-soft"
+      class="sticky top-0 z-50 bg-[#FDF6EF]/90 backdrop-blur border-b border-amber-100"
     >
       <div
-        class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between"
+        class="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between"
       >
         <a
           href="index.html"
-          class="flex items-center gap-2 font-mono font-bold text-primary text-lg tracking-tight"
+          class="flex items-center gap-2 font-serif font-bold text-pr"
+          ><span
+            class="w-7 h-7 rounded-xl bg-pr flex items-center justify-center text-white text-xs"
+            ><i class="fa-solid fa-brain"></i
+          ></span>
+          Ayu · KB</a
         >
-          <span
-            class="w-8 h-8 rounded-2xl bg-primary flex items-center justify-center text-white text-sm"
-          >
-            <i class="fa-solid fa-brain"></i>
-          </span>
-          Ayu<span class="text-slate-400">.portfolio</span>
-        </a>
-        <nav class="flex items-center gap-4 text-sm">
+        <div class="flex items-center gap-3 text-sm">
           <a
             href="index.html"
-            class="text-slate-500 hover:text-primary transition-colors"
+            class="text-stone-400 hover:text-pr transition-colors"
+            ><i class="fa-solid fa-arrow-left mr-1"></i>Kembali</a
           >
-            <i class="fa-solid fa-arrow-left mr-1.5"></i>Kembali
-          </a>
           <a
             href="tugas2.html"
-            class="bg-primary text-white px-4 py-2 rounded-2xl font-semibold hover:bg-primary-dark transition-colors text-xs"
-          >
-            Tugas 2 <i class="fa-solid fa-arrow-right ml-1"></i>
-          </a>
-        </nav>
+            class="bg-pr text-white px-4 py-1.5 rounded-xl font-semibold text-xs hover:bg-pr-dark transition-colors"
+            >Tugas 2 <i class="fa-solid fa-arrow-right ml-1"></i
+          ></a>
+        </div>
       </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <section class="max-w-5xl mx-auto px-6 pt-14 pb-8">
-      <div class="fade-up flex items-center gap-3 mb-4">
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-8">
+      <!-- Header -->
+      <div class="fade-up">
         <span
-          class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-soft"
+          class="text-xs font-semibold bg-amber-50 border border-amber-200 text-pr px-3 py-1 rounded-full"
+          >Tugas 1</span
         >
-          <i class="fa-solid fa-network-wired text-white"></i>
-        </span>
-        <div>
-          <span
-            class="text-xs font-mono text-blue-400 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full"
-            >Tugas 1</span
+        <h1 class="font-serif text-3xl font-bold text-stone-900 mt-2">
+          Algoritma Pencarian: BFS & DFS
+        </h1>
+        <p class="text-stone-500 text-sm mt-1">
+          Penelusuran graf menggunakan Breadth-First Search dan Depth-First
+          Search
+        </p>
+      </div>
+
+      <!-- Penjelasan -->
+      <div class="fade-up d1 grid sm:grid-cols-2 gap-4">
+        <div class="bg-white rounded-3xl p-6 border border-amber-100">
+          <div
+            class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pr-light to-pr flex items-center justify-center mb-3"
           >
-          <h1 class="text-2xl font-extrabold text-slate-900">
-            Algoritma Pencarian: BFS & DFS
-          </h1>
+            <i class="fa-solid fa-layer-group text-white"></i>
+          </div>
+          <h3 class="font-serif font-bold text-stone-800 mb-2">
+            BFS – Breadth First Search
+          </h3>
+          <p class="text-stone-500 text-xs leading-relaxed">
+            Menelusuri simpul per level menggunakan
+            <strong>Queue (FIFO)</strong>. Menjamin jalur dengan jumlah edge
+            terkecil pada graf tak berbobot.
+          </p>
+        </div>
+        <div class="bg-white rounded-3xl p-6 border border-amber-100">
+          <div
+            class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-300 to-pr flex items-center justify-center mb-3"
+          >
+            <i class="fa-solid fa-arrow-down text-white"></i>
+          </div>
+          <h3 class="font-serif font-bold text-stone-800 mb-2">
+            DFS – Depth First Search
+          </h3>
+          <p class="text-stone-500 text-xs leading-relaxed">
+            Menelusuri sedalam mungkin sebelum <em>backtrack</em>, menggunakan
+            <strong>Stack (LIFO)</strong>. Cocok untuk mengeksplorasi semua
+            kemungkinan jalur.
+          </p>
         </div>
       </div>
-      <div class="fade-up delay-1 flex flex-wrap gap-2 mb-2">
-        <span
-          class="text-xs bg-blue-50 border border-blue-100 text-primary px-3 py-1 rounded-full font-medium"
-          ><i class="fa-solid fa-calendar mr-1"></i>April 2026</span
-        >
-        <span
-          class="text-xs bg-green-50 border border-green-100 text-green-600 px-3 py-1 rounded-full font-medium"
-          ><i class="fa-solid fa-circle-check mr-1"></i>Selesai</span
-        >
-        <span
-          class="text-xs bg-blue-50 border border-blue-100 text-primary px-3 py-1 rounded-full font-medium"
-          ><i class="fa-brands fa-python mr-1"></i>Python / JavaScript</span
-        >
-      </div>
-    </section>
 
-    <main class="max-w-5xl mx-auto px-6 pb-20 space-y-10">
-      <!-- DESCRIPTION -->
-      <section
-        class="fade-up delay-2 bg-white rounded-4xl shadow-card border border-blue-50 p-8"
-      >
-        <h2
-          class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"
-        >
-          <i class="fa-solid fa-file-lines text-primary"></i> Deskripsi Tugas
+      <!-- Kode -->
+      <div class="fade-up d2 bg-white rounded-3xl p-6 border border-amber-100">
+        <h2 class="font-serif font-bold text-stone-800 mb-4">
+          <i class="fa-solid fa-code text-pr mr-2"></i>Implementasi Python
         </h2>
-        <p class="text-slate-600 text-sm leading-relaxed mb-4">
-          Tugas ini meminta mahasiswa untuk memahami dan mengimplementasikan dua
-          algoritma pencarian dasar dalam kecerdasan buatan, yaitu
-          <strong>Breadth-First Search (BFS)</strong> dan
-          <strong>Depth-First Search (DFS)</strong>. Kedua algoritma diuji pada
-          sebuah graf tak berarah untuk menemukan jalur dari simpul awal ke
-          simpul tujuan.
-        </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="bg-blue-50 rounded-3xl p-5 border border-blue-100">
-            <h3 class="font-bold text-primary text-sm mb-2">
-              <i class="fa-solid fa-circle-nodes mr-2"></i>BFS (Breadth-First
-              Search)
-            </h3>
-            <p class="text-slate-600 text-xs leading-relaxed">
-              Menelusuri graf per level (lebar). Menggunakan struktur data
-              <strong>Queue (FIFO)</strong>. Menjamin jalur terpendek (jumlah
-              edge) pada graf tak berbobot.
-            </p>
-          </div>
-          <div class="bg-blue-50 rounded-3xl p-5 border border-blue-100">
-            <h3 class="font-bold text-primary text-sm mb-2">
-              <i class="fa-solid fa-arrow-down-long mr-2"></i>DFS (Depth-First
-              Search)
-            </h3>
-            <p class="text-slate-600 text-xs leading-relaxed">
-              Menelusuri graf sedalam mungkin sebelum backtrack. Menggunakan
-              struktur data <strong>Stack (LIFO)</strong>. Cocok untuk
-              eksplorasi seluruh kemungkinan jalur.
-            </p>
-          </div>
+        <div class="flex gap-2 mb-4">
+          <button
+            class="tab active bg-pr text-white text-xs font-semibold px-4 py-1.5 rounded-xl"
+            data-t="bfs"
+          >
+            BFS
+          </button>
+          <button
+            class="tab bg-amber-50 border border-amber-200 text-pr text-xs font-semibold px-4 py-1.5 rounded-xl"
+            data-t="dfs"
+          >
+            DFS
+          </button>
         </div>
-      </section>
+        <div id="bfs" class="tab-c">
+          <pre
+            class="bg-stone-900 text-stone-100 rounded-2xl p-5 overflow-x-auto leading-relaxed"
+          ><code><span class="text-amber-300">from</span> collections <span class="text-amber-300">import</span> deque
 
-      <!-- CONCLUSION -->
-      <section
-        class="bg-gradient-to-br from-primary to-blue-700 rounded-4xl p-8 text-white shadow-card"
-      >
-        <h2 class="text-lg font-bold mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-lightbulb"></i> Kesimpulan
+<span class="text-green-400">def</span> <span class="text-yellow-200">bfs</span>(graph, start, goal):
+    queue = deque([(start, [start])])
+    visited = {start}
+    <span class="text-amber-300">while</span> queue:
+        node, path = queue.popleft()
+        <span class="text-amber-300">if</span> node == goal:
+            <span class="text-amber-300">return</span> path
+        <span class="text-amber-300">for</span> nb <span class="text-amber-300">in</span> graph[node]:
+            <span class="text-amber-300">if</span> nb <span class="text-amber-300">not in</span> visited:
+                visited.add(nb)
+                queue.append((nb, path + [nb]))
+    <span class="text-amber-300">return</span> <span class="text-blue-400">None</span>
+
+<span class="text-stone-400"># Contoh:</span>
+graph = {'A':['B','C'],'B':['D','E'],'C':['F'],'D':[],'E':['F'],'F':[]}
+<span class="text-blue-400">print</span>(bfs(graph, <span class="text-green-300">'A'</span>, <span class="text-green-300">'F'</span>))  <span class="text-stone-400"># ['A','C','F']</span></code></pre>
+        </div>
+        <div id="dfs" class="tab-c hidden">
+          <pre
+            class="bg-stone-900 text-stone-100 rounded-2xl p-5 overflow-x-auto leading-relaxed"
+          ><code><span class="text-green-400">def</span> <span class="text-yellow-200">dfs</span>(graph, node, goal, visited=<span class="text-blue-400">None</span>, path=<span class="text-blue-400">None</span>):
+    <span class="text-amber-300">if</span> visited <span class="text-amber-300">is</span> <span class="text-blue-400">None</span>: visited, path = set(), [node]
+    visited.add(node)
+    <span class="text-amber-300">if</span> node == goal: <span class="text-amber-300">return</span> path
+    <span class="text-amber-300">for</span> nb <span class="text-amber-300">in</span> graph[node]:
+        <span class="text-amber-300">if</span> nb <span class="text-amber-300">not in</span> visited:
+            r = dfs(graph, nb, goal, visited, path+[nb])
+            <span class="text-amber-300">if</span> r: <span class="text-amber-300">return</span> r
+    <span class="text-amber-300">return</span> <span class="text-blue-400">None</span>
+
+<span class="text-stone-400"># Contoh:</span>
+graph = {'A':['B','C'],'B':['D','E'],'C':['F'],'D':[],'E':['F'],'F':[]}
+<span class="text-blue-400">print</span>(dfs(graph, <span class="text-green-300">'A'</span>, <span class="text-green-300">'F'</span>))  <span class="text-stone-400"># ['A','B','E','F']</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Tabel Perbandingan -->
+      <div class="bg-white rounded-3xl p-6 border border-amber-100">
+        <h2 class="font-serif font-bold text-stone-800 mb-4">
+          <i class="fa-solid fa-table text-pr mr-2"></i>Perbandingan BFS vs DFS
         </h2>
-        <p class="text-blue-100 text-sm leading-relaxed">
-          BFS dan DFS adalah dua algoritma pencarian fundamental dalam
-          Kecerdasan Buatan.
-          <strong class="text-white">BFS</strong> unggul saat kita membutuhkan
-          jalur terpendek karena menelusuri level per level, sedangkan
-          <strong class="text-white">DFS</strong> lebih efisien dalam penggunaan
-          memori dan cocok digunakan saat ruang pencarian sangat besar.
-          Pemilihan algoritma tergantung pada karakteristik masalah yang
-          dihadapi.
-        </p>
-      </section>
-    </main>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead>
+              <tr class="bg-amber-50 text-pr font-bold">
+                <th class="px-4 py-2.5 text-left rounded-tl-xl">Aspek</th>
+                <th class="px-4 py-2.5 text-left">BFS</th>
+                <th class="px-4 py-2.5 text-left rounded-tr-xl">DFS</th>
+              </tr>
+            </thead>
+            <tbody class="text-stone-600">
+              <tr class="border-b border-amber-50">
+                <td class="px-4 py-2.5 font-semibold text-stone-700">
+                  Struktur Data
+                </td>
+                <td class="px-4 py-2.5">Queue (FIFO)</td>
+                <td class="px-4 py-2.5">Stack (LIFO)</td>
+              </tr>
+              <tr class="border-b border-amber-50 bg-amber-50/30">
+                <td class="px-4 py-2.5 font-semibold text-stone-700">
+                  Optimalitas
+                </td>
+                <td class="px-4 py-2.5">✅ Optimal</td>
+                <td class="px-4 py-2.5">❌ Tidak optimal</td>
+              </tr>
+              <tr class="border-b border-amber-50">
+                <td class="px-4 py-2.5 font-semibold text-stone-700">
+                  Kompleksitas
+                </td>
+                <td class="px-4 py-2.5">O(V + E)</td>
+                <td class="px-4 py-2.5">O(V + E)</td>
+              </tr>
+              <tr class="bg-amber-50/30">
+                <td
+                  class="px-4 py-2.5 font-semibold text-stone-700 rounded-bl-xl"
+                >
+                  Cocok untuk
+                </td>
+                <td class="px-4 py-2.5">Jalur terpendek</td>
+                <td class="px-4 py-2.5 rounded-br-xl">Eksplorasi penuh</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-    <!-- FOOTER -->
+      <!-- Kesimpulan -->
+      <div
+        class="bg-gradient-to-br from-pr to-pr-dark rounded-3xl p-7 text-white"
+      >
+        <h2 class="font-serif font-bold text-lg mb-2">
+          <i class="fa-solid fa-lightbulb mr-2"></i>Kesimpulan
+        </h2>
+        <p class="text-amber-100 text-sm leading-relaxed">
+          BFS menjamin jalur terpendek menggunakan Queue, cocok ketika solusi
+          optimal diperlukan. DFS menggunakan Stack dan lebih hemat memori,
+          cocok untuk eksplorasi ruang besar. Pilihan algoritma tergantung
+          kebutuhan masalah yang dihadapi.
+        </p>
+      </div>
+    </div>
+
     <footer
-      class="bg-white border-t border-blue-100 py-6 px-6 text-center text-slate-400 text-xs"
+      class="bg-white border-t border-amber-100 py-5 text-center text-stone-400 text-xs"
     >
-      <p>
-        © 2026 Ayu Indah Fitriani — STMIK Mardira Indonesia · Tugas Kecerdasan
-        Buatan
-      </p>
+      © 2026 Ayu Indah — STMIK Mardira Indonesia
     </footer>
 
     <script>
-      // ── Graph Definition ──
-      const graph = {
-        A: ["B", "C"],
-        B: ["A", "D", "E"],
-        C: ["A", "F"],
-        D: ["B"],
-        E: ["B", "F"],
-        F: ["C", "E"],
-      };
-
-      // Node positions (percentage of canvas)
-      const positions = {
-        A: { x: 0.12, y: 0.5 },
-        B: { x: 0.35, y: 0.22 },
-        C: { x: 0.35, y: 0.78 },
-        D: { x: 0.58, y: 0.12 },
-        E: { x: 0.62, y: 0.48 },
-        F: { x: 0.85, y: 0.62 },
-      };
-
-      const edges = [
-        ["A", "B"],
-        ["A", "C"],
-        ["B", "D"],
-        ["B", "E"],
-        ["C", "F"],
-        ["E", "F"],
-      ];
-
-      let animTimeout = [];
-
-      function getCanvas() {
-        return document.getElementById("graphCanvas");
-      }
-
-      function renderGraph(highlighted = {}) {
-        const canvas = getCanvas();
-        const W = canvas.offsetWidth,
-          H = canvas.offsetHeight;
-        const svg = document.getElementById("edgeSvg");
-        svg.innerHTML = "";
-        // Draw edges
-        edges.forEach(([a, b]) => {
-          const pa = positions[a],
-            pb = positions[b];
-          const line = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "line",
-          );
-          line.setAttribute("x1", pa.x * W);
-          line.setAttribute("y1", pa.y * H);
-          line.setAttribute("x2", pb.x * W);
-          line.setAttribute("y2", pb.y * H);
-          line.setAttribute("stroke", "#BFDBFE");
-          line.setAttribute("stroke-width", "2.5");
-          line.setAttribute("stroke-linecap", "round");
-          svg.appendChild(line);
-        });
-
-        // Remove old nodes
-        canvas.querySelectorAll(".node").forEach((n) => n.remove());
-
-        Object.entries(positions).forEach(([id, pos]) => {
-          const el = document.createElement("div");
-          el.className = "node " + (highlighted[id] || "unvisited");
-          el.textContent = id;
-          el.style.left = pos.x * W - 22 + "px";
-          el.style.top = pos.y * H - 22 + "px";
-          canvas.appendChild(el);
-        });
-      }
-
-      function log(msg, cls = "log-info") {
-        const logEl = document.getElementById("log");
-        logEl.innerHTML += `<div class="${cls}">${msg}</div>`;
-        logEl.scrollTop = logEl.scrollHeight;
-      }
-
-      function resetVis() {
-        animTimeout.forEach(clearTimeout);
-        animTimeout = [];
-        document.getElementById("log").innerHTML =
-          '<span class="log-info">// Tekan Mulai untuk memulai penelusuran...</span>';
-        document.getElementById("result").classList.add("hidden");
-        renderGraph({});
-        document.getElementById("runBtn").disabled = false;
-      }
-
-      function runBFS(start, goal) {
-        const steps = [];
-        const visited = new Set();
-        const queue = [[start, [start]]];
-        visited.add(start);
-        let found = null;
-        const stateMap = {};
-
-        while (queue.length) {
-          const [node, path] = queue.shift();
-          steps.push({ type: "current", node, path: [...path] });
-          if (node === goal) {
-            found = path;
-            break;
-          }
-          for (const nb of graph[node]) {
-            if (!visited.has(nb)) {
-              visited.add(nb);
-              queue.push([nb, [...path, nb]]);
-              steps.push({ type: "visited", node: nb, path: null });
-            }
-          }
-          steps.push({ type: "done", node });
-        }
-        return { steps, found };
-      }
-
-      function runDFS(start, goal) {
-        const steps = [];
-        const visited = new Set();
-        let found = null;
-
-        function dfs(node, path) {
-          if (found) return;
-          visited.add(node);
-          steps.push({ type: "current", node, path: [...path] });
-          if (node === goal) {
-            found = path;
-            return;
-          }
-          for (const nb of graph[node]) {
-            if (!visited.has(nb)) {
-              steps.push({ type: "visited", node: nb, path: null });
-              dfs(nb, [...path, nb]);
-              if (found) return;
-            }
-          }
-          steps.push({ type: "done", node });
-        }
-        dfs(start, [start]);
-        return { steps, found };
-      }
-
-      function animate(steps, found) {
-        const highlighted = {};
-        let i = 0;
-
-        function next() {
-          if (i >= steps.length) {
-            if (found) {
-              found.forEach((n) => (highlighted[n] = "path"));
-              renderGraph(highlighted);
-              document.getElementById("result").classList.remove("hidden");
-              document.getElementById("resultPath").textContent =
-                "Jalur: " + found.join(" → ") + ` (${found.length - 1} edge)`;
-              log(
-                `✅ Goal "${found[found.length - 1]}" ditemukan! Jalur: ${found.join(" → ")}`,
-                "log-found",
-              );
-            } else {
-              log("❌ Jalur tidak ditemukan.", "log-info");
-            }
-            document.getElementById("runBtn").disabled = false;
-            return;
-          }
-          const s = steps[i++];
-          if (s.type === "current") {
-            highlighted[s.node] = "current";
-            log(`⚡ Memproses node: <strong>${s.node}</strong>`, "log-current");
-          } else if (s.type === "visited") {
-            if (highlighted[s.node] !== "current")
-              highlighted[s.node] = "visited";
-            log(`  ↳ Mengunjungi tetangga: ${s.node}`, "log-visited");
-          } else if (s.type === "done") {
-            highlighted[s.node] = "visited";
-          }
-          renderGraph(highlighted);
-          animTimeout.push(setTimeout(next, 600));
-        }
-        next();
-      }
-
-      document.getElementById("runBtn").addEventListener("click", () => {
-        resetVis();
-        const algo = document.getElementById("algoSelect").value;
-        const start = document.getElementById("startNode").value;
-        const goal = document.getElementById("goalNode").value;
-        document.getElementById("log").innerHTML = "";
-        log(
-          `▶ Algoritma: ${algo.toUpperCase()} | Start: ${start} | Goal: ${goal}`,
-          "log-info",
-        );
-        document.getElementById("runBtn").disabled = true;
-        const { steps, found } =
-          algo === "bfs" ? runBFS(start, goal) : runDFS(start, goal);
-        animate(steps, found);
-      });
-
-      document.getElementById("resetBtn").addEventListener("click", resetVis);
-
-      // Code tabs
-      document.querySelectorAll(".code-tab").forEach((tab) => {
-        tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach((t) =>
+        t.addEventListener("click", () => {
           document
-            .querySelectorAll(".code-block")
-            .forEach((b) => b.classList.add("hidden"));
-          document.querySelectorAll(".code-tab").forEach((t) => {
-            t.classList.remove("bg-primary", "text-white");
-            t.classList.add(
-              "bg-blue-50",
+            .querySelectorAll(".tab-c")
+            .forEach((c) => c.classList.add("hidden"));
+          document.querySelectorAll(".tab").forEach((b) => {
+            b.classList.remove("bg-pr", "text-white");
+            b.classList.add(
+              "bg-amber-50",
               "border",
-              "border-blue-200",
-              "text-primary",
+              "border-amber-200",
+              "text-pr",
             );
           });
-          document
-            .getElementById("code-" + tab.dataset.tab)
-            .classList.remove("hidden");
-          tab.classList.add("bg-primary", "text-white");
-          tab.classList.remove(
-            "bg-blue-50",
+          document.getElementById(t.dataset.t).classList.remove("hidden");
+          t.classList.add("bg-pr", "text-white");
+          t.classList.remove(
+            "bg-amber-50",
             "border",
-            "border-blue-200",
-            "text-primary",
+            "border-amber-200",
+            "text-pr",
           );
-        });
-      });
-
-      // Initial render
-      window.addEventListener("load", () => renderGraph({}));
-      window.addEventListener("resize", () => renderGraph({}));
+        }),
+      );
     </script>
   </body>
 </html>
